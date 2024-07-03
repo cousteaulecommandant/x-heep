@@ -145,7 +145,9 @@ verible:
 ## @param COMPILER=gcc(default), clang
 ## @param COMPILER_PREFIX=riscv32-unknown-(default)
 ## @param ARCH=rv32imc(default), <any RISC-V ISA string supported by the CPU>
-app: clean-app
+app: clean-app build-app
+
+build-app:
 	$(MAKE) -C sw PROJECT=$(PROJECT) TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) COMPILER_PREFIX=$(COMPILER_PREFIX) ARCH=$(ARCH) SOURCE=$(SOURCE)
 
 ## Just list the different application names available
@@ -216,7 +218,7 @@ run-blinkyfreertos: mcu-gen verilator-sim
 
 ## First builds the app and then uses verilator to simulate the HW model and run the FW
 ## UART Dumping in uart0.log to show recollected results
-run-app-verilator: app
+run-app-verilator: build-app
 	cd ./build/openhwgroup.org_systems_core-v-mini-mcu_0/sim-verilator; \
 	./Vtestharness +firmware=../../../sw/build/main.hex; \
 	cat uart0.log; \
